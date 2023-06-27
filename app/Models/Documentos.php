@@ -35,17 +35,17 @@ class Documentos extends Model
 
         $sql = (
             "SELECT doc.id AS id,
-                doc.nome,
-                doc.extensao,
+                doc.nome AS nome,
+                doc.extensao AS extensao,
                 IFNULL(doc.caminho_arquivo, '') AS caminho_arquivo,
                 IFNULL(doc.conteudo, '') AS conteudo,
                 users.id AS usuario_id,
                 users.name AS nome_usuario,
                 CASE
                     WHEN doc.usuario_id = {$userId} THEN 'todas'
-                    ELSE CONCAT('ver: ', IFNULL(IF(dp.pode_ver, 'Sim', 'Não'), 'Não'), ' | ',
-                                'editar: ', IFNULL(IF(dp.pode_editar, 'Sim', 'Não'), 'Não'), ' | ',
-                                'excluir: ', IFNULL(IF(dp.pode_excluir, 'Sim', 'Não'), 'Não'))
+                    ELSE CONCAT(IFNULL(IF(dp.pode_ver, 'visualizar | ', ''), ''), '',
+                                IFNULL(IF(dp.pode_editar, 'editar | ', ''), ''), '',
+                                IFNULL(IF(dp.pode_excluir, 'excluir', ''), ''))
                 END AS permissoes,
                 doc.created_at AS criacao,
                 doc.updated_at AS atualizacao
